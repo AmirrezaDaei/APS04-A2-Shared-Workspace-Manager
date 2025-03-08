@@ -22,8 +22,8 @@ struct table {
 };
 
 struct student {
-    string name;
     int ID;
+    string name;
     int friendID;
     int enemyID;
     struct table table;
@@ -46,7 +46,7 @@ vector<string> readFile(string fileAddress) {
 }
 
 void readTables(vector<string> tablesData, vector<table> &tables) {
-    for(int i = 0; i < tablesData.size()/5; i++) {
+    for(int i = 0; i < tablesData.size() / 5; i++) {
         struct table newTable;
         newTable.ID = stoi(tablesData[i * 5]);
         newTable.x = stoi(tablesData[i * 5 + 1]);
@@ -62,7 +62,16 @@ void readTables(vector<string> tablesData, vector<table> &tables) {
     }
 }
 
-
+void readStudents(vector<string> studentsData, vector<student> &students) {
+    for(int i = 0; i < studentsData.size() / 4; i++) {
+        struct student newStudent;
+        newStudent.ID = stoi(studentsData[i * 4]);
+        newStudent.name = studentsData[i * 4 + 1];
+        newStudent.friendID = stoi(studentsData[i * 4 + 2]);
+        newStudent.enemyID = stoi(studentsData[i * 4 + 3]);
+        students.push_back(newStudent);
+    }
+}
 
 int main(int argc,char* argv[]) {
     vector<table> tables;
@@ -70,4 +79,8 @@ int main(int argc,char* argv[]) {
     vector<string> tablesData = readFile(argv[1]);
     vector<string> studentsData = readFile(argv[2]);
     readTables(tablesData, tables);
+    readStudents(studentsData, students);
+    for(struct student student : students) {
+        cout << student.ID << " " << student.name << " " << student.friendID << " " << student.enemyID << endl;
+    }
 }
