@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+
 using namespace std;
 
 struct table {
@@ -9,7 +10,8 @@ struct table {
     int capacity;
     int bonus;
     int score = 0;
-    vector<int> coordination;
+    int x;
+    int y;
     vector<struct student> students;
     vector<struct student> queue;
 };
@@ -19,15 +21,9 @@ struct student {
     int ID;
     int friendID;
     int enemyID;
-    struct table table = NULL;
+    struct table table;
 };
 
+int main(int argc,char* argv[]) {
 
-struct system{
-    vector<struct table> tables;
-    vector<struct student> students;
-};
-
-int main() {
-    return 0;
 }
