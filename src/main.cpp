@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -24,6 +25,28 @@ struct student {
     struct table table;
 };
 
-int main(int argc,char* argv[]) {
+vector<string> readFile(string fileAddress) {
+    ifstream file(fileAddress);
+    vector<string> datas;
+    string line;
+    getline(file, line);
+    while(getline(file, line)) {
+        stringstream row(line);
+        string value;
+        while(getline(row, value, ',')) {
+            datas.push_back(value);
+        }
+    }
+    return datas;
+}
 
+void readTables(vector<string> tables) {
+    
+}
+
+int main(int argc,char* argv[]) {
+    vector<table> tables;
+    vector<student> students;
+    vector<string> tablesData = readFile(argv[1]);
+    vector<string> studentsData = readFile(argv[2]);
 }
