@@ -9,6 +9,11 @@ using namespace std;
 const string WINDOW = "window";
 const string DOOR = "door";
 const string MIDDLE = "middle";
+const string SHOW_TABLE_INFO = "show_table_info";
+const string ENTER = "enter";
+const string RESERVE_TABLE = "reserve_table";
+const string EXIT = "exit";
+const string SWITCH = "switch";
 
 struct table {
     int ID;
@@ -73,14 +78,34 @@ void readStudents(vector<string> studentsData, vector<student> &students) {
     }
 }
 
+void getCommands() {
+    string command, line;
+    getline(cin, line);
+    stringstream ss(line);
+    ss >> command;
+    if(command == SHOW_TABLE_INFO) {
+        // showTableInfo();
+    }
+    else if(command == ENTER) {
+        // enter();
+    }
+    else if(command == RESERVE_TABLE) {
+        // reserveTable();
+    }
+    else if(command == EXIT) {
+        // exitStudent();
+    }
+    else if(command == SWITCH) {
+        // switch();
+    }
+}
+
 int main(int argc,char* argv[]) {
     vector<table> tables;
     vector<student> students;
-    vector<string> tablesData = readFile(argv[1]);
-    vector<string> studentsData = readFile(argv[2]);
-    readTables(tablesData, tables);
-    readStudents(studentsData, students);
-    for(struct student student : students) {
-        cout << student.ID << " " << student.name << " " << student.friendID << " " << student.enemyID << endl;
-    }
+    // vector<string> tablesData = readFile(argv[1]);
+    // vector<string> studentsData = readFile(argv[2]);
+    // readTables(tablesData, tables);
+    // readStudents(studentsData, students);
+    getCommands();
 }
