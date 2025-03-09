@@ -84,18 +84,28 @@ void getCommands() {
     stringstream ss(line);
     ss >> command;
     if(command == SHOW_TABLE_INFO) {
+        int tableID;
+        ss >> tableID;
         // showTableInfo();
     }
     else if(command == ENTER) {
+        int studentID;
+        ss >> studentID;
         // enter();
     }
     else if(command == RESERVE_TABLE) {
+        int studentID;
+        ss >> studentID;
         // reserveTable();
     }
     else if(command == EXIT) {
+        int studentID;
+        ss >> studentID;
         // exitStudent();
     }
     else if(command == SWITCH) {
+        int studentID;
+        ss >> studentID;
         // switch();
     }
 }
@@ -103,9 +113,9 @@ void getCommands() {
 int main(int argc,char* argv[]) {
     vector<table> tables;
     vector<student> students;
-    // vector<string> tablesData = readFile(argv[1]);
-    // vector<string> studentsData = readFile(argv[2]);
-    // readTables(tablesData, tables);
-    // readStudents(studentsData, students);
+    vector<string> tablesData = readFile(argv[1]);
+    vector<string> studentsData = readFile(argv[2]);
+    readTables(tablesData, tables);
+    readStudents(studentsData, students);
     getCommands();
 }
