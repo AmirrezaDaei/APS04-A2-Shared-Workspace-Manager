@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -78,7 +79,11 @@ void readStudents(vector<string> studentsData, vector<student> &students) {
     }
 }
 
-void getCommands() {
+table findTable(vector<table> tables, int tableID) {
+    find_if(tables.begin(), tables.end(), [=](table table) {if(table.ID == tableID) return table;});
+}
+
+void getCommands(vector<table> tables, vector<student> students) {
     string command, line;
     getline(cin, line);
     stringstream ss(line);
@@ -86,6 +91,7 @@ void getCommands() {
     if(command == SHOW_TABLE_INFO) {
         int tableID;
         ss >> tableID;
+        findTable(tables, tableID);
         // showTableInfo();
     }
     else if(command == ENTER) {
@@ -94,9 +100,15 @@ void getCommands() {
         // enter();
     }
     else if(command == RESERVE_TABLE) {
-        int studentID;
+        int studentID, tableID;
         ss >> studentID;
-        // reserveTable();
+        ss >> tableID;
+        if(ss.fail()) {
+            // reserveBestTable();
+        }
+        else {
+            // reserveRequestedTable();
+        }
     }
     else if(command == EXIT) {
         int studentID;
@@ -117,5 +129,5 @@ int main(int argc,char* argv[]) {
     vector<string> studentsData = readFile(argv[2]);
     readTables(tablesData, tables);
     readStudents(studentsData, students);
-    getCommands();
+    getCommands(tables, students);
 }
