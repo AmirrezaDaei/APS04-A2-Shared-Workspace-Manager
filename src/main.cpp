@@ -84,6 +84,18 @@ auto findTable(vector<table> tables, int tableID) {
     return* table;
 }
 
+void showTableInfo(table table, int tableID) {
+    sort(table.students.begin(), table.students.end(), [](student& student1, student& student2) {return student1.name < student2.name;});
+    cout << "table ID: " << tableID << "\n";
+    cout << "People at the table: ";
+    if(!table.students.empty()) {
+        cout << table.students.begin() -> name << "hello";
+        for_each(table.students.begin() + 1, table.students.end(), [](student student) {cout << ", " << student.name;});
+    }
+    cout << "\nTable remaining capacity: " << table.capacity << "\n";
+    cout << "Waiting queue length: " << table.queue.size() << "\n";
+}
+
 void getCommands(vector<table> tables, vector<student> students) {
     string command, line;
     getline(cin, line);
@@ -93,7 +105,7 @@ void getCommands(vector<table> tables, vector<student> students) {
         int tableID;
         ss >> tableID;
         auto table = findTable(tables, tableID);
-        // showTableInfo();
+        showTableInfo(table, tableID);
     }
     else if(command == ENTER) {
         int studentID;
