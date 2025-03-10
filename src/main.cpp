@@ -23,8 +23,8 @@ struct table {
     int capacity;
     int bonus;
     int score = 0;
-    vector<struct student> students;
-    vector<struct student> queue;
+    vector<string> students;
+    vector<string> queue;
 };
 
 struct student {
