@@ -86,19 +86,32 @@ auto findTable(vector<table> tables, int tableID) {
 
 void showTableInfo(table table, int tableID) {
     sort(table.students.begin(), table.students.end());
-    cout << "table ID: " << tableID << "\n";
+    cout << "table ID: " << tableID << endl;
     cout << "People at the table: ";
     if(!table.students.empty()) {
         cout << *table.students.begin();
         for_each(table.students.begin() + 1, table.students.end(), [](string student) {cout << ", " << student;});
     }
-    cout << "\nTable remaining capacity: " << table.capacity << "\n";
-    cout << "Waiting queue length: " << table.queue.size() << "\n";
+    cout << endl << "Table remaining capacity: " << table.capacity << endl;
+    cout << "Waiting queue length: " << table.queue.size() << endl;
 }
 
 auto findStudent(vector<student> students, int studentID) {
     auto table = find_if(students.begin(), students.end(), [studentID](struct student student) {return student.ID == studentID;});
     return* table;
+}
+
+void reserveTable(table table, student student) {
+    if(table.capacity > 0) {
+        table.students.push_back(student.name);
+        table.capacity--;
+        student.table = table;
+        cout << student.name << " sits at table " << table.ID << endl;
+    }
+    else {
+        table.queue.push_back(student.name);
+        cout << student.name << " enters the waiting queue of table " << table.ID << endl;
+    }
 }
 
 void getCommands(vector<table> tables, vector<student> students) {
@@ -121,11 +134,14 @@ void getCommands(vector<table> tables, vector<student> students) {
         int studentID, tableID;
         ss >> studentID;
         ss >> tableID;
+        auto student = findStudent(students, studentID);
         if(ss.fail()) {
-            // reserveBestTable();
+            //auto table = findBestTable();
+            // reserveTable(table, student);
         }
         else {
-            // reserveRequestedTable();
+            auto table = findTable(tables, tableID);
+            reserveTable(table, student);
         }
     }
     else if(command == EXIT) {
