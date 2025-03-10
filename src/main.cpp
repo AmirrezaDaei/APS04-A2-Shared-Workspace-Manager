@@ -96,6 +96,11 @@ void showTableInfo(table table, int tableID) {
     cout << "Waiting queue length: " << table.queue.size() << "\n";
 }
 
+auto findStudent(vector<student> students, int studentID) {
+    auto table = find_if(students.begin(), students.end(), [studentID](struct student student) {return student.ID == studentID;});
+    return* table;
+}
+
 void getCommands(vector<table> tables, vector<student> students) {
     string command, line;
     getline(cin, line);
