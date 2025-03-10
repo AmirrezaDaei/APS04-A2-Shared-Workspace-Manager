@@ -79,8 +79,9 @@ void readStudents(vector<string> studentsData, vector<student> &students) {
     }
 }
 
-table findTable(vector<table> tables, int tableID) {
-    find_if(tables.begin(), tables.end(), [=](table table) {if(table.ID == tableID) return table;});
+auto findTable(vector<table> tables, int tableID) {
+    auto table = find_if(tables.begin(), tables.end(), [tableID](struct table table) {return table.ID == tableID;});
+    return* table;
 }
 
 void getCommands(vector<table> tables, vector<student> students) {
@@ -91,7 +92,7 @@ void getCommands(vector<table> tables, vector<student> students) {
     if(command == SHOW_TABLE_INFO) {
         int tableID;
         ss >> tableID;
-        findTable(tables, tableID);
+        auto table = findTable(tables, tableID);
         // showTableInfo();
     }
     else if(command == ENTER) {
