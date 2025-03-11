@@ -30,7 +30,7 @@ struct table {
     int bonus;
     int score = 0;
     vector<string> students;
-    vector<string> queue;
+    vector<int> queue;
 };
 
 struct student {
@@ -115,14 +115,11 @@ void reserveTable(vector<table>::iterator &tableIt, vector<student>::iterator &s
         cout << studentIt->name << SIT_MESSAGE << tableIt->ID << endl;
     }
     else {
-        tableIt->queue.push_back(studentIt->name);
+        tableIt->queue.push_back(studentIt->ID);
         cout << studentIt->name << ENTER_QUEUE_MESSAGE << tableIt->ID << endl;
     }
 }
 
-void exitStudent(vector<table>::iterator &tableIt, vector<student>::iterator &studentIt) {
-    studentIt->table = table();
-}
 
 void getCommands(vector<table> &tables, vector<student> &students) {
     string command, line;
@@ -158,8 +155,9 @@ void getCommands(vector<table> &tables, vector<student> &students) {
             int studentID;
             ss >> studentID;
             auto studentIt = findStudent(students, studentID);
+            auto friendIt = findStudent(students, studentIt->friendID);
             auto tableIt = findTable(tables, studentIt->table.ID);
-            exitStudent(tableIt, studentIt);
+            // exitStudent(tableIt, studentIt, friendIt);
         }
         else if(command == SWITCH) {
             int studentID;
