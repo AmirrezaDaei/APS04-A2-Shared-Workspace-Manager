@@ -85,39 +85,43 @@ void readStudents(vector<string> &studentsData, vector<student> &students) {
     }
 }
 
-vector<table>::iterator findTable(vector<table> tables, int tableID) {
+vector<table>::iterator findTable(vector<table> &tables, int tableID) {
     auto table = find_if(tables.begin(), tables.end(), [tableID](struct table table) {return table.ID == tableID;});
     return table;
 }
 
-void showTableInfo(vector<table>::iterator table, int tableID) {
-    sort(table->students.begin(), table->students.end());
-    cout << TABLE_ID << table->ID << endl;
+void showTableInfo(vector<table>::iterator tableIt, int tableID) {
+    sort(tableIt->students.begin(), tableIt->students.end());
+    cout << TABLE_ID << tableIt->ID << endl;
     cout << PEOPLE_MESSAGE;
-    if(!table->students.empty()) {
-        cout << *table->students.begin();
-        for_each(table->students.begin() + 1, table->students.end(), [](string student) {cout << ", " << student;});
+    if(!tableIt->students.empty()) {
+        cout << *tableIt->students.begin();
+        for_each(tableIt->students.begin() + 1, tableIt->students.end(), [](string student) {cout << ", " << student;});
     }
-    cout << endl << TABLE_CAPACITY_MESSAGE << table->capacity << endl;
-    cout << QUEUE_MESSAGE << table->queue.size() << endl;
+    cout << endl << TABLE_CAPACITY_MESSAGE << tableIt->capacity << endl;
+    cout << QUEUE_MESSAGE << tableIt->queue.size() << endl;
 }
 
-vector<student>::iterator findStudent(vector<student> students, int studentID) {
+vector<student>::iterator findStudent(vector<student> &students, int studentID) {
     auto table = find_if(students.begin(), students.end(), [studentID](struct student student) {return student.ID == studentID;});
     return table;
 }
 
-void reserveTable(vector<table>::iterator table, vector<student>::iterator student) {
-    if(table->capacity > 0) {
-        table->students.push_back(student->name);
-        table->capacity--;
-        student->table = *table;
-        cout << student->name << SIT_MESSAGE << table->ID << endl;
+void reserveTable(vector<table>::iterator &tableIt, vector<student>::iterator &studentIt) {
+    if(tableIt->capacity > 0) {
+        tableIt->students.push_back(studentIt->name);
+        tableIt->capacity--;
+        studentIt->table = *tableIt;
+        cout << studentIt->name << SIT_MESSAGE << tableIt->ID << endl;
     }
     else {
-        table->queue.push_back(student->name);
-        cout << student->name << ENTER_QUEUE_MESSAGE << table->ID << endl;
+        tableIt->queue.push_back(studentIt->name);
+        cout << studentIt->name << ENTER_QUEUE_MESSAGE << tableIt->ID << endl;
     }
+}
+
+void exitStudent(vector<table>::iterator &tableIt, vector<student>::iterator &studentIt) {
+    studentIt->table = table();
 }
 
 void getCommands(vector<table> &tables, vector<student> &students) {
@@ -153,7 +157,9 @@ void getCommands(vector<table> &tables, vector<student> &students) {
         else if(command == EXIT) {
             int studentID;
             ss >> studentID;
-            // exitStudent();
+            auto studentIt = findStudent(students, studentID);
+            auto tableIt = findTable(tables, studentIt->table.ID);
+            exitStudent(tableIt, studentIt);
         }
         else if(command == SWITCH) {
             int studentID;
