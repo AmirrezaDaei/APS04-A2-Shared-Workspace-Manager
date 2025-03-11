@@ -21,6 +21,7 @@ const string TABLE_CAPACITY_MESSAGE = "Table remaining capacity: ";
 const string QUEUE_MESSAGE = "Waiting queue length: ";
 const string SIT_MESSAGE = " sits at table ";
 const string ENTER_QUEUE_MESSAGE = " enters the waiting queue of table ";
+const string EXIT_MESSAGE = " exits!";
 
 struct table {
     int ID;
@@ -120,6 +121,28 @@ void reserveTable(vector<table>::iterator &tableIt, vector<student>::iterator &s
     }
 }
 
+void exitStudent(vector<student> &students, vector<table>::iterator &tableIt, vector<student>::iterator &studentIt, vector<student>::iterator &friendIt) {
+    studentIt->table = table();
+    tableIt->students.erase(find(tableIt->students.begin(), tableIt->students.end(), studentIt->name));
+    cout << studentIt->name << EXIT_MESSAGE << endl;
+    cout << tableIt->queue.size();
+    if(tableIt->queue.size() > 0) {
+        for(int student : tableIt->queue) {
+            if(friendIt->ID == student) {
+                tableIt->students.push_back(friendIt->name);
+                tableIt->queue.erase(find(tableIt->queue.begin(), tableIt->queue.end(), friendIt->ID));
+                friendIt->table = *tableIt;
+                return;
+            }
+        }
+        auto newStudent = findStudent(students, *(tableIt->queue.begin()));
+        tableIt->students.push_back(newStudent->name);
+        tableIt->queue.erase(tableIt->queue.begin());
+        newStudent->table = *tableIt;
+        return;
+    }
+    tableIt->capacity++;
+}
 
 void getCommands(vector<table> &tables, vector<student> &students) {
     string command, line;
@@ -157,7 +180,7 @@ void getCommands(vector<table> &tables, vector<student> &students) {
             auto studentIt = findStudent(students, studentID);
             auto friendIt = findStudent(students, studentIt->friendID);
             auto tableIt = findTable(tables, studentIt->table.ID);
-            // exitStudent(tableIt, studentIt, friendIt);
+            exitStudent(students, tableIt, studentIt, friendIt);
         }
         else if(command == SWITCH) {
             int studentID;
