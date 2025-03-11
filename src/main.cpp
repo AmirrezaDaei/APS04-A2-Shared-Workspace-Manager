@@ -85,80 +85,81 @@ void readStudents(vector<string> &studentsData, vector<student> &students) {
     }
 }
 
-auto findTable(vector<table> tables, int tableID) {
+vector<table>::iterator findTable(vector<table> tables, int tableID) {
     auto table = find_if(tables.begin(), tables.end(), [tableID](struct table table) {return table.ID == tableID;});
-    return* table;
+    return table;
 }
 
-void showTableInfo(table &table, int tableID) {
-    sort(table.students.begin(), table.students.end());
-    cout << TABLE_ID << tableID << endl;
+void showTableInfo(vector<table>::iterator table, int tableID) {
+    sort(table->students.begin(), table->students.end());
+    cout << TABLE_ID << table->ID << endl;
     cout << PEOPLE_MESSAGE;
-    if(!table.students.empty()) {
-        cout << *table.students.begin();
-        for_each(table.students.begin() + 1, table.students.end(), [](string student) {cout << ", " << student;});
+    if(!table->students.empty()) {
+        cout << *table->students.begin();
+        for_each(table->students.begin() + 1, table->students.end(), [](string student) {cout << ", " << student;});
     }
-    cout << endl << TABLE_CAPACITY_MESSAGE << table.capacity << endl;
-    cout << QUEUE_MESSAGE << table.queue.size() << endl;
+    cout << endl << TABLE_CAPACITY_MESSAGE << table->capacity << endl;
+    cout << QUEUE_MESSAGE << table->queue.size() << endl;
 }
 
-auto findStudent(vector<student> students, int studentID) {
+vector<student>::iterator findStudent(vector<student> students, int studentID) {
     auto table = find_if(students.begin(), students.end(), [studentID](struct student student) {return student.ID == studentID;});
-    return* table;
+    return table;
 }
 
-void reserveTable(table &table, student &student) {
-    if(table.capacity > 0) {
-        table.students.push_back(student.name);
-        table.capacity--;
-        student.table = table;
-        cout << student.name << SIT_MESSAGE << table.ID << endl;
+void reserveTable(vector<table>::iterator table, vector<student>::iterator student) {
+    if(table->capacity > 0) {
+        table->students.push_back(student->name);
+        table->capacity--;
+        student->table = *table;
+        cout << student->name << SIT_MESSAGE << table->ID << endl;
     }
     else {
-        table.queue.push_back(student.name);
-        cout << student.name << ENTER_QUEUE_MESSAGE << table.ID << endl;
+        table->queue.push_back(student->name);
+        cout << student->name << ENTER_QUEUE_MESSAGE << table->ID << endl;
     }
 }
 
 void getCommands(vector<table> &tables, vector<student> &students) {
     string command, line;
-    getline(cin, line);
-    stringstream ss(line);
-    ss >> command;
-    if(command == SHOW_TABLE_INFO) {
-        int tableID;
-        ss >> tableID;
-        auto table = findTable(tables, tableID);
-        showTableInfo(table, tableID);
-    }
-    else if(command == ENTER) {
-        int studentID;
-        ss >> studentID;
-        // enter();
-    }
-    else if(command == RESERVE_TABLE) {
-        int studentID, tableID;
-        ss >> studentID;
-        ss >> tableID;
-        auto student = findStudent(students, studentID);
-        if(ss.fail()) {
-            //auto table = findBestTable();
-            // reserveTable(table, student);
-        }
-        else {
+    while(getline(cin, line)) {
+        stringstream ss(line);
+        ss >> command;
+        if(command == SHOW_TABLE_INFO) {
+            int tableID;
+            ss >> tableID;
             auto table = findTable(tables, tableID);
-            reserveTable(table, student);
+            showTableInfo(table, tableID);
         }
-    }
-    else if(command == EXIT) {
-        int studentID;
-        ss >> studentID;
-        // exitStudent();
-    }
-    else if(command == SWITCH) {
-        int studentID;
-        ss >> studentID;
-        // switch();
+        else if(command == ENTER) {
+            int studentID;
+            ss >> studentID;
+            // enter();
+        }
+        else if(command == RESERVE_TABLE) {
+            int studentID, tableID;
+            ss >> studentID;
+            ss >> tableID;
+            auto student = findStudent(students, studentID);
+            if(ss.fail()) {
+                //auto table = findBestTable();
+                // reserveTable(table, student);
+            }
+            else {
+                auto table = findTable(tables, tableID);
+                reserveTable(table, student);
+            }
+        }
+        else if(command == EXIT) {
+            int studentID;
+            ss >> studentID;
+            // exitStudent();
+        }
+        else if(command == SWITCH) {
+            int studentID;
+            ss >> studentID;
+            // switch();
+        }
     }
 }
 
