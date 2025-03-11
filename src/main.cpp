@@ -147,6 +147,18 @@ void exitStudent(vector<student> &students, vector<table>::iterator &tableIt, ve
     tableIt->capacity++;
 }
 
+void switchStudents(vector<table> &tables, vector<student> &students, vector<student>::iterator &studentIt, vector<student>::iterator &friendIt) {
+    auto studentTableIt = findTable(tables, studentIt->table.ID);
+    auto friendTableIt = findTable(tables, friendIt->table.ID);
+    studentTableIt->students.erase(find(studentTableIt->students.begin(), studentTableIt->students.end(), studentIt->name));
+    friendTableIt->students.erase(find(friendTableIt->students.begin(), friendTableIt->students.end(), studentIt->name));
+    studentTableIt->students.push_back(friendIt->name);
+    friendTableIt->students.push_back(studentIt->name);
+    studentIt->table = *friendTableIt;
+    friendIt->table = *studentTableIt;
+    
+}
+
 void getCommands(vector<table> &tables, vector<student> &students) {
     string command, line;
     while(getline(cin, line)) {
@@ -188,7 +200,9 @@ void getCommands(vector<table> &tables, vector<student> &students) {
         else if(command == SWITCH) {
             int studentID;
             ss >> studentID;
-            // switch();
+            auto studentIt = findStudent(students, studentID);
+            auto friendIt = findStudent(students, studentIt->friendID);
+            switchStudents(tables, students, studentIt, friendIt);
         }
     }
 }
