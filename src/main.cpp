@@ -57,7 +57,7 @@ vector<string> readFile(string fileAddress) {
     return datas;
 }
 
-void readTables(vector<string> tablesData, vector<table> &tables) {
+void readTables(vector<string> &tablesData, vector<table> &tables) {
     for(int i = 0; i < tablesData.size() / 5; i++) {
         struct table newTable;
         newTable.ID = stoi(tablesData[i * 5]);
@@ -74,7 +74,7 @@ void readTables(vector<string> tablesData, vector<table> &tables) {
     }
 }
 
-void readStudents(vector<string> studentsData, vector<student> &students) {
+void readStudents(vector<string> &studentsData, vector<student> &students) {
     for(int i = 0; i < studentsData.size() / 4; i++) {
         struct student newStudent;
         newStudent.ID = stoi(studentsData[i * 4]);
@@ -90,7 +90,7 @@ auto findTable(vector<table> tables, int tableID) {
     return* table;
 }
 
-void showTableInfo(table table, int tableID) {
+void showTableInfo(table &table, int tableID) {
     sort(table.students.begin(), table.students.end());
     cout << TABLE_ID << tableID << endl;
     cout << PEOPLE_MESSAGE;
@@ -107,7 +107,7 @@ auto findStudent(vector<student> students, int studentID) {
     return* table;
 }
 
-void reserveTable(table table, student student) {
+void reserveTable(table &table, student &student) {
     if(table.capacity > 0) {
         table.students.push_back(student.name);
         table.capacity--;
@@ -120,7 +120,7 @@ void reserveTable(table table, student student) {
     }
 }
 
-void getCommands(vector<table> tables, vector<student> students) {
+void getCommands(vector<table> &tables, vector<student> &students) {
     string command, line;
     getline(cin, line);
     stringstream ss(line);
