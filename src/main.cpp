@@ -15,6 +15,10 @@ const string ENTER = "enter";
 const string RESERVE_TABLE = "reserve_table";
 const string EXIT = "exit";
 const string SWITCH = "switch";
+const string TABLE_ID = "table ID: ";
+const string PEOPLE_MESSAGE = "People at the table: ";
+const string TABLE_CAPACITY_MESSAGE = "Table remaining capacity: ";
+const string QUEUE_MESSAGE = "Waiting queue length: ";
 
 struct table {
     int ID;
@@ -86,14 +90,14 @@ auto findTable(vector<table> tables, int tableID) {
 
 void showTableInfo(table table, int tableID) {
     sort(table.students.begin(), table.students.end());
-    cout << "table ID: " << tableID << endl;
-    cout << "People at the table: ";
+    cout << TABLE_ID << tableID << endl;
+    cout << PEOPLE_MESSAGE;
     if(!table.students.empty()) {
         cout << *table.students.begin();
         for_each(table.students.begin() + 1, table.students.end(), [](string student) {cout << ", " << student;});
     }
-    cout << endl << "Table remaining capacity: " << table.capacity << endl;
-    cout << "Waiting queue length: " << table.queue.size() << endl;
+    cout << endl << TABLE_CAPACITY_MESSAGE << table.capacity << endl;
+    cout << QUEUE_MESSAGE << table.queue.size() << endl;
 }
 
 auto findStudent(vector<student> students, int studentID) {
