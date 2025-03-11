@@ -19,6 +19,8 @@ const string TABLE_ID = "table ID: ";
 const string PEOPLE_MESSAGE = "People at the table: ";
 const string TABLE_CAPACITY_MESSAGE = "Table remaining capacity: ";
 const string QUEUE_MESSAGE = "Waiting queue length: ";
+const string SIT_MESSAGE = " sits at table ";
+const string ENTER_QUEUE_MESSAGE = " enters the waiting queue of table ";
 
 struct table {
     int ID;
@@ -110,11 +112,11 @@ void reserveTable(table table, student student) {
         table.students.push_back(student.name);
         table.capacity--;
         student.table = table;
-        cout << student.name << " sits at table " << table.ID << endl;
+        cout << student.name << SIT_MESSAGE << table.ID << endl;
     }
     else {
         table.queue.push_back(student.name);
-        cout << student.name << " enters the waiting queue of table " << table.ID << endl;
+        cout << student.name << ENTER_QUEUE_MESSAGE << table.ID << endl;
     }
 }
 
