@@ -121,25 +121,28 @@ void reserveTable(vector<table>::iterator &tableIt, vector<student>::iterator &s
     }
 }
 
+void replaceQueue(vector<student> &students, vector<table>::iterator &tableIt, vector<student>::iterator &friendIt) {
+    for(int student : tableIt->queue) {
+        if(friendIt->ID == student) {
+            tableIt->students.push_back(friendIt->name);
+            tableIt->queue.erase(find(tableIt->queue.begin(), tableIt->queue.end(), friendIt->ID));
+            friendIt->table = *tableIt;
+            return;
+        }
+    }
+    auto newStudent = findStudent(students, *(tableIt->queue.begin()));
+    tableIt->students.push_back(newStudent->name);
+    tableIt->queue.erase(tableIt->queue.begin());
+    newStudent->table = *tableIt;
+    return;
+}
+
 void exitStudent(vector<student> &students, vector<table>::iterator &tableIt, vector<student>::iterator &studentIt, vector<student>::iterator &friendIt) {
     studentIt->table = table();
     tableIt->students.erase(find(tableIt->students.begin(), tableIt->students.end(), studentIt->name));
     cout << studentIt->name << EXIT_MESSAGE << endl;
-    cout << tableIt->queue.size();
     if(tableIt->queue.size() > 0) {
-        for(int student : tableIt->queue) {
-            if(friendIt->ID == student) {
-                tableIt->students.push_back(friendIt->name);
-                tableIt->queue.erase(find(tableIt->queue.begin(), tableIt->queue.end(), friendIt->ID));
-                friendIt->table = *tableIt;
-                return;
-            }
-        }
-        auto newStudent = findStudent(students, *(tableIt->queue.begin()));
-        tableIt->students.push_back(newStudent->name);
-        tableIt->queue.erase(tableIt->queue.begin());
-        newStudent->table = *tableIt;
-        return;
+        replaceQueue(students, tableIt, friendIt);
     }
     tableIt->capacity++;
 }
