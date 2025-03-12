@@ -124,6 +124,21 @@ void calculateTablesScore(vector<table> &tables, vector<student> &students, vect
     }
 }
 
+vector<table>::iterator findBestTable(vector<table> &tables) {
+    for(table table : tables)
+        cout << table.ID << " " << table.score << endl;
+    auto bestTable = tables.begin();
+    for(vector<table>::iterator table = tables.begin(); table != tables.end(); table++) {
+        if(table->score > bestTable->score)
+        bestTable = table;
+        else if(table->score == bestTable->score) {
+            if(table->ID < bestTable->ID)
+                bestTable = table;
+        }
+    }
+    return bestTable;
+}
+
 void reserveTable(vector<table>::iterator &tableIt, vector<student>::iterator &studentIt) {
     if(tableIt->capacity > 0) {
         tableIt->students.push_back(studentIt->name);
