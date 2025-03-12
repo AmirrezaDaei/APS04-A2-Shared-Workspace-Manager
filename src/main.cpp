@@ -22,6 +22,9 @@ const string QUEUE_MESSAGE = "Waiting queue length: ";
 const string SIT_MESSAGE = " sits at table ";
 const string ENTER_QUEUE_MESSAGE = " enters the waiting queue of table ";
 const string EXIT_MESSAGE = " exits!";
+const string TABLE_MESSAGE = "Table ";
+const string COLON = ": ";
+const string SPACE = " ";
 
 struct table {
     int ID = 0;
@@ -91,6 +94,11 @@ vector<table>::iterator findTable(vector<table> &tables, int tableID) {
     return table;
 }
 
+vector<student>::iterator findStudent(vector<student> &students, int studentID) {
+    auto table = find_if(students.begin(), students.end(), [studentID](struct student student) {return student.ID == studentID;});
+    return table;
+}
+
 void showTableInfo(vector<table>::iterator tableIt, int tableID) {
     sort(tableIt->students.begin(), tableIt->students.end());
     cout << TABLE_ID << tableIt->ID << endl;
@@ -103,9 +111,10 @@ void showTableInfo(vector<table>::iterator tableIt, int tableID) {
     cout << QUEUE_MESSAGE << tableIt->queue.size() << endl;
 }
 
-vector<student>::iterator findStudent(vector<student> &students, int studentID) {
-    auto table = find_if(students.begin(), students.end(), [studentID](struct student student) {return student.ID == studentID;});
-    return table;
+void printTables(vector<table> &tables) {
+    for(auto table = tables.begin(); table != tables.end(); table++) {
+        cout << TABLE_MESSAGE << table->ID << COLON << table->capacity << SPACE << table->queue.size() << endl;
+    }
 }
 
 void calculateTablesScore(vector<table> &tables, vector<student> &students, vector<student>::iterator &student) {
@@ -121,6 +130,7 @@ void calculateTablesScore(vector<table> &tables, vector<student> &students, vect
             enemyDistance = abs(table->x - enemyIt->table.x) + abs(table->y - enemyIt->table.y);
         
         table->score = enemyDistance - friendDistance + table->bonus;
+        cout << table->ID << SPACE << table->score << endl;
     }
 }
 
@@ -202,7 +212,10 @@ void getCommands(vector<table> &tables, vector<student> &students) {
         else if(command == ENTER) {
             int studentID;
             ss >> studentID;
-            // enter();
+            auto student = findStudent(students, studentID);
+            calculateTablesScore(tables, students, student);
+            sort(tables.begin(), tables.end(), [](table table1, table table2){return table1.score > table2.score;});
+            printTables(tables);
         }
         else if(command == RESERVE_TABLE) {
             int studentID, tableID;
