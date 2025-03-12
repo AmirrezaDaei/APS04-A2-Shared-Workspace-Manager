@@ -112,15 +112,15 @@ void calculateTablesScore(vector<table> &tables, vector<student> &students, vect
     auto friendIt = findStudent(students, student->friendID);
     auto enemyIt = findStudent(students, student->enemyID);
     int friendDistance, enemyDistance;
-    for(table table : tables) {
+    for(vector<table>::iterator table = tables.begin(); table != tables.end(); table++) {
         friendDistance = 0;
         enemyDistance = 0;
         if(friendIt->table.ID != 0)
-            friendDistance = abs(table.x - friendIt->table.x) + abs(table.y - friendIt->table.y);
+            friendDistance = abs(table->x - friendIt->table.x) + abs(table->y - friendIt->table.y);
         if(enemyIt->table.ID != 0)
-            enemyDistance = abs(table.x - enemyIt->table.x) + abs(table.y - enemyIt->table.y);
+            enemyDistance = abs(table->x - enemyIt->table.x) + abs(table->y - enemyIt->table.y);
         
-        table.score = enemyDistance - friendDistance + table.bonus;
+        table->score = enemyDistance - friendDistance + table->bonus;
     }
 }
 
@@ -198,7 +198,7 @@ void getCommands(vector<table> &tables, vector<student> &students) {
             auto student = findStudent(students, studentID);
             if(ss.fail()) {
                 calculateTablesScore(tables, students, student);
-                // auto table = findBestTable();
+                // auto table = findBestTable(tables);
                 // reserveTable(table, student);
             }
             else {
