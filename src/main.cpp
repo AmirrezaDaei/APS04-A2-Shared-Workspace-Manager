@@ -125,8 +125,6 @@ void calculateTablesScore(vector<table> &tables, vector<student> &students, vect
 }
 
 vector<table>::iterator findBestTable(vector<table> &tables) {
-    for(table table : tables)
-        cout << table.ID << " " << table.score << endl;
     auto bestTable = tables.begin();
     for(vector<table>::iterator table = tables.begin(); table != tables.end(); table++) {
         if(table->score > bestTable->score)
@@ -213,8 +211,8 @@ void getCommands(vector<table> &tables, vector<student> &students) {
             auto student = findStudent(students, studentID);
             if(ss.fail()) {
                 calculateTablesScore(tables, students, student);
-                // auto table = findBestTable(tables);
-                // reserveTable(table, student);
+                auto table = findBestTable(tables);
+                reserveTable(table, student);
             }
             else {
                 auto table = findTable(tables, tableID);
