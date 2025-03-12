@@ -16,7 +16,7 @@ const string ENTER = "enter";
 const string RESERVE_TABLE = "reserve_table";
 const string EXIT = "exit";
 const string SWITCH = "switch";
-const string TABLE_ID = "table ID: ";
+const string TABLE_ID = "Table ID: ";
 const string PEOPLE_MESSAGE = "People at the table: ";
 const string TABLE_CAPACITY_MESSAGE = "Table remaining capacity: ";
 const string QUEUE_MESSAGE = "Waiting queue length: ";
@@ -116,7 +116,7 @@ void showTableInfo(vector<table>::iterator tableIt, int tableID) {
 
 void printTables(vector<table> &tables) {
     for(auto table = tables.begin(); table != tables.end(); table++) {
-        cout << TABLE_MESSAGE << table->ID << COLON << table->capacity << SPACE << table->queue.size() << SPACE << table->score << endl;
+        cout << TABLE_MESSAGE << table->ID << COLON << table->capacity << SPACE << table->queue.size() << endl;
     }
 }
 
