@@ -184,6 +184,7 @@ void exitStudent(vector<student> &students, vector<table>::iterator &tableIt, ve
     cout << studentIt->name << EXIT_MESSAGE << endl;
     if(tableIt->queue.size() > 0) {
         replaceQueue(students, tableIt, friendIt);
+        return;
     }
     tableIt->capacity++;
 }
