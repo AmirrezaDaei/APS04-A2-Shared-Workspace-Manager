@@ -216,7 +216,10 @@ void getCommands(vector<table> &tables, vector<student> &students) {
             ss >> studentID;
             auto student = findStudent(students, studentID);
             calculateTablesScore(tables, students, student);
-            sort(tables.begin(), tables.end(), [](table table1, table table2){return table1.score > table2.score;});
+            sort(tables.begin(), tables.end(), [](table table1, table table2){
+                if(table1.score == table2.score)
+                    return table1.ID < table2.ID;
+                return table1.score > table2.score;});
             printTables(tables);
         }
         else if(command == RESERVE_TABLE) {
