@@ -7,6 +7,7 @@
 
 using namespace std;
 
+const char COMMA = ',';
 const string WINDOW = "window";
 const string DOOR = "door";
 const string MIDDLE = "middle";
@@ -25,6 +26,8 @@ const string EXIT_MESSAGE = " exits!";
 const string TABLE_MESSAGE = "Table ";
 const string COLON = ": ";
 const string SPACE = " ";
+const string SWITCH_MESSAGE = " switches seats with ";
+const string EXCLAMATION_MARK = "!";
 
 struct table {
     int ID = 0;
@@ -53,7 +56,7 @@ vector<string> readFile(string fileAddress) {
     while(getline(file, line)) {
         stringstream row(line);
         string value;
-        while(getline(row, value, ',')) {
+        while(getline(row, value, COMMA)) {
             datas.push_back(value);
         }
     }
@@ -105,7 +108,7 @@ void showTableInfo(vector<table>::iterator tableIt, int tableID) {
     cout << PEOPLE_MESSAGE;
     if(!tableIt->students.empty()) {
         cout << *tableIt->students.begin();
-        for_each(tableIt->students.begin() + 1, tableIt->students.end(), [](string student) {cout << ", " << student;});
+        for_each(tableIt->students.begin() + 1, tableIt->students.end(), [](string student) {cout << COMMA << SPACE << student;});
     }
     cout << endl << TABLE_CAPACITY_MESSAGE << tableIt->capacity << endl;
     cout << QUEUE_MESSAGE << tableIt->queue.size() << endl;
@@ -130,7 +133,6 @@ void calculateTablesScore(vector<table> &tables, vector<student> &students, vect
             enemyDistance = abs(table->x - enemyIt->table.x) + abs(table->y - enemyIt->table.y);
         
         table->score = enemyDistance - friendDistance + table->bonus;
-        cout << table->ID << SPACE << table->score << endl;
     }
 }
 
@@ -195,7 +197,7 @@ void switchStudents(vector<table> &tables, vector<student> &students, vector<stu
     friendTableIt->students.push_back(studentIt->name);
     studentIt->table = *friendTableIt;
     friendIt->table = *studentTableIt;
-    
+    cout << studentIt->name << SWITCH_MESSAGE << friendIt->name << EXCLAMATION_MARK << endl;
 }
 
 void getCommands(vector<table> &tables, vector<student> &students) {
