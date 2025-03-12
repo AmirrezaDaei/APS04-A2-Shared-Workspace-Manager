@@ -24,7 +24,7 @@ const string ENTER_QUEUE_MESSAGE = " enters the waiting queue of table ";
 const string EXIT_MESSAGE = " exits!";
 
 struct table {
-    int ID;
+    int ID = 0;
     int x;
     int y;
     int capacity;
@@ -108,6 +108,22 @@ vector<student>::iterator findStudent(vector<student> &students, int studentID) 
     return table;
 }
 
+void calculateTablesScore(vector<table> &tables, vector<student> &students, vector<student>::iterator &student) {
+    auto friendIt = findStudent(students, student->friendID);
+    auto enemyIt = findStudent(students, student->enemyID);
+    int friendDistance, enemyDistance;
+    for(table table : tables) {
+        friendDistance = 0;
+        enemyDistance = 0;
+        if(friendIt->table.ID != 0)
+            friendDistance = abs(table.x - friendIt->table.x) + abs(table.y - friendIt->table.y);
+        if(enemyIt->table.ID != 0)
+            enemyDistance = abs(table.x - enemyIt->table.x) + abs(table.y - enemyIt->table.y);
+        
+        table.score = enemyDistance - friendDistance + table.bonus;
+    }
+}
+
 void reserveTable(vector<table>::iterator &tableIt, vector<student>::iterator &studentIt) {
     if(tableIt->capacity > 0) {
         tableIt->students.push_back(studentIt->name);
@@ -181,7 +197,8 @@ void getCommands(vector<table> &tables, vector<student> &students) {
             ss >> tableID;
             auto student = findStudent(students, studentID);
             if(ss.fail()) {
-                //auto table = findBestTable();
+                calculateTablesScore(tables, students, student);
+                // auto table = findBestTable();
                 // reserveTable(table, student);
             }
             else {
