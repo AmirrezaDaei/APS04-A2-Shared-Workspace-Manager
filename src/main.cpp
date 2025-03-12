@@ -116,7 +116,7 @@ void showTableInfo(vector<table>::iterator tableIt, int tableID) {
 
 void printTables(vector<table> &tables) {
     for(auto table = tables.begin(); table != tables.end(); table++) {
-        cout << TABLE_MESSAGE << table->ID << COLON << table->capacity << SPACE << table->queue.size() << endl;
+        cout << TABLE_MESSAGE << table->ID << COLON << table->capacity << SPACE << table->queue.size() << SPACE << table->score << endl;
     }
 }
 
@@ -124,14 +124,13 @@ void calculateTablesScore(vector<table> &tables, vector<student> &students, vect
     auto friendIt = findStudent(students, student->friendID);
     auto enemyIt = findStudent(students, student->enemyID);
     int friendDistance, enemyDistance;
-    for(vector<table>::iterator table = tables.begin(); table != tables.end(); table++) {
+    for(auto table = tables.begin(); table != tables.end(); table++) {
         friendDistance = 0;
         enemyDistance = 0;
         if(friendIt->table.ID != 0)
             friendDistance = abs(table->x - friendIt->table.x) + abs(table->y - friendIt->table.y);
         if(enemyIt->table.ID != 0)
             enemyDistance = abs(table->x - enemyIt->table.x) + abs(table->y - enemyIt->table.y);
-        
         table->score = enemyDistance - friendDistance + table->bonus;
     }
 }
